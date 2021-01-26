@@ -188,7 +188,8 @@ native_GPC_TLVDecode(JNIEnv *env, jclass obj, jstring jApdu) {
     } else {
         Json::FastWriter writer;
         Json::Value root;
-        root["tag"] = tag;
+        Json::Int64 tmTag = tag;
+        root["tag"] = tmTag;
         root["value"] = value;
         jstring result = env->NewStringUTF(writer.write(root).c_str());
         JUB_FreeMemory(value);
@@ -256,7 +257,8 @@ static JNINativeMethod gMethods[] = {
 };
 
 
-#define NATIVE_API_CLASS "com/jubiter/sdk/gpchannel/GPChannelNatives"
+//#define NATIVE_API_CLASS "com/jubiter/sdk/gpchannel/GPChannelNatives"
+#define NATIVE_API_CLASS "org/haobtc/onekey/card/gpchannel/GPChannelNatives"
 
 /**
  * JNI_OnLoad 默认会在 System.loadLibrary 过程中自动调用到，因而可利用此函数，进行动态注册

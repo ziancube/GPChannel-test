@@ -9,6 +9,8 @@ import android.view.View;
 
 import com.jubiter.sdk.gpchannel.utils.JSONParseUtils;
 
+import org.haobtc.onekey.card.gpchannel.GPChannelNatives;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override

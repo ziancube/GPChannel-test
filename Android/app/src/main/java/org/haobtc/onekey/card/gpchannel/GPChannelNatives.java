@@ -1,11 +1,11 @@
-package com.jubiter.sdk.gpchannel;
+package org.haobtc.onekey.card.gpchannel;
 
 /**
  * @Date 2020-07-09  16:29
  * @Author ZJF
  * @Version 1.0
  */
-class GPChannelNatives {
+public class GPChannelNatives {
 
     static {
         System.loadLibrary("gpchannelNDK");

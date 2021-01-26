@@ -28,6 +28,9 @@ public:
 
     virtual JUB_RV SetSCP03(void *pscp03) = 0;
     virtual JUB_RV SetSCP11(void *pscp11) = 0;
+
+protected:
+    virtual JUB_RV IncCounter() = 0;
 }; // class ApduBuilder end
 
 
@@ -56,7 +59,10 @@ public:
     virtual JUB_RV SetSCP03(void *scp03Ptr);
     virtual JUB_RV SetSCP11(void *scp11Ptr);
 
-private:
+protected:
+    virtual JUB_RV IncCounter() override;
+
+  private:
     void *_scp03Ptr;
     void *_scp11Ptr;
 }; // class JubApduBuiler end
