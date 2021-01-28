@@ -27,10 +27,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w")
 # -DNDEBUG 不DEBUG
 # -s 移除符号表（减小 .so 体积）
 # -fvisibility=hidden 隐藏符号表（与‘-s’有何区别？是否有冲突）
-set(CMAKE_C_FLAGS_RELEASE "-Os -DNDEBUG -s -fvisibility=hidden")
-set(CMAKE_CXX_FLAGS_RELEASE "-Os -DNDEBUG -s -fvisibility=hidden")
-set(CMAKE_C_FLAGS_RELWITHDEBINFO "-Os -DNDEBUG")
-set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-Os -DNDEBUG")
+set(CMAKE_C_FLAGS_RELEASE "-O0 -DNDEBUG -s -fvisibility=hidden")
+set(CMAKE_CXX_FLAGS_RELEASE "-O0 -DNDEBUG -s -fvisibility=hidden")
+set(CMAKE_C_FLAGS_RELWITHDEBINFO "-O0 -DNDEBUG")
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O0 -DNDEBUG")
 
 # 打印参数信息
 message("CMAKE_C_FLAGS_DEBUG is ${CMAKE_C_FLAGS_DEBUG}")

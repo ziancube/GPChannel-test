@@ -12,6 +12,9 @@ import com.jubiter.sdk.gpchannel.utils.JSONParseUtils;
 import org.haobtc.onekey.card.gpchannel.GPChannelNatives;
 
 public class MainActivity extends AppCompatActivity {
+//    static {
+//        System.loadLibrary("gpchannelNDK");
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
