@@ -7,15 +7,22 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/btn_test"
-        style="@style/button"
-        android:onClick="onClick"
-        android:text="scp11_process_sample" />
-
-    <Button
         android:id="@+id/btn_tlv"
         style="@style/button"
         android:onClick="onClick"
         android:text="scp11_tlv_test" />
+
+    <Button
+        android:id="@+id/btn_scp11_verify_pin_test"
+        style="@style/button"
+        android:onClick="onClick"
+        android:text="scp11_verify_pin_test" />
+
+    <Button
+        android:id="@+id/btn_scp11_change_pin_test"
+        style="@style/button"
+        android:onClick="onClick"
+        android:text="scp11_change_pin_test" />
+
 
 </LinearLayout>

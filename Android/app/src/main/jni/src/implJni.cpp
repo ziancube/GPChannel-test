@@ -43,6 +43,7 @@ JNIEXPORT jint  JNICALL native_GPC_Initialize(JNIEnv *env, jclass obj,
     sharedInfo.keyLength = (JUB_CHAR_PTR) vKeyLength.getHex().c_str();
 
     sharedInfo.hostID = (JUB_CHAR_PTR) root["hostID"].asCString();
+    sharedInfo.cardGroupID = (JUB_CHAR_PTR) root["cardGroupID"].asCString();
 
     char *p = (char *) root["crt"].asCString();
     uchar_vector vOCECert(p);
@@ -197,6 +198,29 @@ native_GPC_TLVDecode(JNIEnv *env, jclass obj, jstring jApdu) {
     }
 }
 
+JNIEXPORT jstring JNICALL
+native_GPC_ParseCertificate(JNIEnv *env, jclass obj, jstring jCert) {
+    JUB_CHAR_PTR pCert = const_cast<JUB_CHAR_PTR>(env->GetStringUTFChars(jCert, NULL));
+    JUB_CHAR_PTR sn;
+    JUB_CHAR_PTR subjectID;
+    JUB_RV ret = JUB_GPC_ParseCertificate(pCert, &sn, &subjectID);
+    env->ReleaseStringUTFChars(jCert, (const char *) pCert);
+    if (ret != JUBR_OK) {
+        LOG_ERR("JUB_GPC_ParseCertificate: %08x", ret);
+        errorCode = static_cast<int>(ret);
+        return NULL;
+    } else {
+        Json::FastWriter writer;
+        Json::Value root;
+        root["sn"] = sn;
+        root["subjectID"] = subjectID;
+        jstring result = env->NewStringUTF(writer.write(root).c_str());
+        JUB_FreeMemory(sn);
+        JUB_FreeMemory(subjectID);
+        return result;
+    }
+}
+
 /**
  * JNINativeMethod由三部分组成:
  * (1)Java中的函数名;
@@ -253,6 +277,11 @@ static JNINativeMethod gMethods[] = {
                 "nativeGPCTLVDecode",
                 "(Ljava/lang/String;)Ljava/lang/String;",
                 (void *) native_GPC_TLVDecode
+        },
+        {
+                "nativeGPCParseCertificate",
+                "(Ljava/lang/String;)Ljava/lang/String;",
+                (void *) native_GPC_ParseCertificate
         }
 };
 

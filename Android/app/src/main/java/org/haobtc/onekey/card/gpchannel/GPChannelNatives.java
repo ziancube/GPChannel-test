@@ -36,4 +36,6 @@ public class GPChannelNatives {
 
     public static native String nativeGPCTLVDecode(String apdu);
 
+    public static native String nativeGPCParseCertificate(String cert);
+
 }
