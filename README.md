@@ -16,6 +16,9 @@
 
 ## Demo in C
 See "test/GPChannelSDK_test_scp11.cpp", function scp11_process_sample().
+#### 0. prepare:
+**JUB_GPC_ParseCertificate** is called for parse a card's certificate, return it's 'Certificate Serial Number' and 'Subject Identifier' (in hex).
+You must check that the device serial number is the same as it's certificate serial number, if yes, go ahead, using 'Subject Identifier' as GPC_SCP11_SHAREDINFO.cardGroupID.
 #### 1. Initialize: 
 **JUB_GPC_Initialize()** is called when it is ready to start the secure channel.
 #### 2. PerformSecurityOperation:  '80 2A 18 10'

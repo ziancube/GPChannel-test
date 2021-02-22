@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/GPChannelSDK.h</key>
 		<data>
-		exvofzc0CPJ2A2aIfH5FW34aN9I=
+		vPC3IcF5Tobjva1AxD4syN1TqyY=
 		</data>
 		<key>Headers/GPChannelSDKCore.h</key>
 		<data>
@@ -14,7 +14,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		WGSYmFKaCzaTscNdo+HJ+6j19i8=
+		KGZUYWkv0WnHzc7iJi1HxBwS/Oo=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -27,11 +27,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			exvofzc0CPJ2A2aIfH5FW34aN9I=
+			vPC3IcF5Tobjva1AxD4syN1TqyY=
 			</data>
 			<key>hash2</key>
 			<data>
-			VM2CZ3q0YEokPA6LsuFe/vzxbxtlrdV/mSh5RXWcXqI=
+			xkpYVjQbafTmICZIFnzc+V7h1X6G6Y8T+ANxw8hSNW8=
 			</data>
 		</dict>
 		<key>Headers/GPChannelSDKCore.h</key>
