@@ -16,6 +16,42 @@
 using std::getline;
 using std::istringstream;
 
+JUB_RV scp11_parse_certificate(const std::string& cert,
+                               std::string& certSN, std::string& certSubjectID) {
+
+    JUB_RV rv = JUBR_ERROR;
+
+    JUB_ULONG tag = 0;
+    JUB_CHAR_PTR value;
+    rv = JUB_GPC_TLVDecode(cert.c_str(), &tag, &value);
+    std::cout << "JUB_GPC_TLVDecode return " << rv << std::endl;
+    if (JUBR_OK != rv) {
+        return rv;
+    }
+    uchar_vector vDeviceCert = uchar_vector(value);
+    std::cout << "[" << tag << "]" << "[" << vDeviceCert.size() << "]: " << vDeviceCert.getHex() << std::endl;
+
+    JUB_CHAR_PTR sn = nullptr;
+    JUB_CHAR_PTR subjectID = nullptr;
+    rv = JUB_GPC_ParseCertificate(value, &sn, &subjectID);
+    std::cout << "JUB_GPC_ParseCertificate return " << rv << std::endl;
+    if (JUBR_OK != rv) {
+        return rv;
+    }
+
+    certSN = std::string(sn);
+    certSubjectID = std::string(subjectID);
+    std::cout << "[certificate's sn       ]" << "[" << certSN.size() << "]: " << certSN << std::endl;
+    std::cout << "[certificate's subjectID]" << "[" << certSubjectID.size() << "]: " << certSubjectID << std::endl;
+
+    JUB_FreeMemory(sn);
+    JUB_FreeMemory(subjectID);
+
+    JUB_FreeMemory(value);
+
+    return rv;
+}
+
 
 void scp11_tlv_test() {
 
@@ -23,16 +59,10 @@ void scp11_tlv_test() {
 
     // GET DEVICE CERTIFICATE : 80 CA BF 21 //////////////////////////////////////////////
     JUB_CHAR_PTR tlv = (JUB_CHAR_PTR)"bf2181dc7f2181d8931042584e46433230303532353030303031420d6a75626974657277616c6c65745f200d6a75626974657277616c6c65749501825f2504202005255f24042025052453007f4946b0410479704bdb2d3da2e547eb6de66e0073f6e61ae32076af007973b5fa1dbe07e0ef38bd84d85f1fe1e1410ff743e659691b36361c76bee2fac44fd88825759268cef001005f37483046022100b076674c9f0ea1ddee84517e2a53cb392ac2c8b25ca3a7d56558570a051737020221008a982e267ffcef5309a272ea492be489a233381c477e8803034a8f6789f2bbd9";
-    JUB_ULONG tag = 0;
-    JUB_CHAR_PTR value;
-    rv = JUB_GPC_TLVDecode(tlv, &tag, &value);
-    std::cout << "JUB_GPC_TLVDecode return " << rv << std::endl;
-    if (JUBR_OK != rv) {
-        return ;
-    }
-    uchar_vector vDeviceCert = uchar_vector(value);
-    std::cout << "[" << tag << "]" << "[" << vDeviceCert.size() << "]: " << vDeviceCert.getHex() << std::endl;
-    JUB_FreeMemory(value);
+    std::string sn;
+    std::string subjectID;
+    rv = scp11_parse_certificate(std::string(tlv),
+                                 sn, subjectID);
 }
 
 
@@ -41,6 +71,20 @@ void scp11_process_sample(const char* json_file) {
     JUB_RV rv = JUBR_ERROR;
 
     Json::Value root = readJSON(json_file);
+
+    // 0. Get card group ID //////////////////////////////////////////////////////////////
+    // SD(NFC card) certificate
+    std::string sdCert = "bf2181dc7f2181d8931042584e46433230303532353030303031420d6a75626974657277616c6c65745f200d6a75626974657277616c6c65749501825f2504202005255f24042025052453007f4946b0410479704bdb2d3da2e547eb6de66e0073f6e61ae32076af007973b5fa1dbe07e0ef38bd84d85f1fe1e1410ff743e659691b36361c76bee2fac44fd88825759268cef001005f37483046022100b076674c9f0ea1ddee84517e2a53cb392ac2c8b25ca3a7d56558570a051737020221008a982e267ffcef5309a272ea492be489a233381c477e8803034a8f6789f2bbd9";
+    std::string sn;
+    std::string subjectID;
+    rv = scp11_parse_certificate(sdCert,
+                                 sn, subjectID);
+    if (JUBR_OK != rv) {
+        return ;
+    }
+
+    // !! Check that the device serial number is the same as it's certificate serial number,
+    // if yes, go ahead, using subjectID as GPC_SCP11_SHAREDINFO.cardGroupID
 
     // 1. Initialize /////////////////////////////////////////////////////////////////////
     // JUB_GPC_Initialize() is called when it is ready to start the secure channel.

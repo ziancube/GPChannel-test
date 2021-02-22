@@ -163,6 +163,7 @@ typedef struct JUB_GPC_SCP11_SHAREDINFO {
     JUB_CHAR_PTR keyType;   // Key Type in hex string, for SCP11c, it's '88' (AES)
     JUB_CHAR_PTR keyLength; // Key Length in hex string, it's '10'
     JUB_CHAR_PTR hostID;    // hostID in hex string, eg, "8080808080808080"
+    JUB_CHAR_PTR cardGroupID;   // is the content of tag '5F20' (subject identifier) in CERT.SD.ECKA, eg, "6a75626974657277616c6c6574"
 } GPC_SCP11_SHAREDINFO;
 
 
@@ -291,6 +292,18 @@ JUB_RV JUB_GPC_ParseSafeAPDUResponse(IN JUB_CHAR_CPTR response,
                                      OUT JUB_UINT16_PTR pwRet,
                                      OUT JUB_CHAR_PTR_PTR decResp);
 
+
+/*****************************************************************************
+ * @function name : JUB_GPC_ParseCertificate
+ * @in  param : cert - certificate of a device
+ * @out param : sn - Certificate Serial Number
+ *           : subjectID - Subject Identifier in hex
+ * @last change :
+ *****************************************************************************/
+JUB_COINCORE_DLL_EXPORT
+JUB_RV JUB_GPC_ParseCertificate(IN JUB_CHAR_CPTR cert,
+                                OUT JUB_CHAR_PTR_PTR sn,
+                                OUT JUB_CHAR_PTR_PTR subjectID);
 
 #ifdef __cplusplus
 }
