@@ -218,6 +218,7 @@ JUB_RV JUB_GPC_Finalize();
  * @in  param :
  * @out param : apduData - APDU data for MutualAuth cmd in hex string
  * @last change :
+ * @ condition: JUB_GPC_Initialize() has been called first.
 *****************************************************************************/
 JUB_COINCORE_DLL_EXPORT
 JUB_RV JUB_GPC_BuildMutualAuthData(OUT JUB_CHAR_PTR_PTR apduData);
@@ -228,6 +229,7 @@ JUB_RV JUB_GPC_BuildMutualAuthData(OUT JUB_CHAR_PTR_PTR apduData);
  * @in  param : response - response from Mutual Auth command in hex string
  * @out param :
  * @last change :
+ * @ condition: JUB_GPC_Initialize() has been called first.
 *****************************************************************************/
 JUB_COINCORE_DLL_EXPORT
 JUB_RV JUB_GPC_OpenSecureChannel(IN JUB_CHAR_CPTR response);
@@ -272,6 +274,7 @@ JUB_RV JUB_GPC_ParseAPDUResponse(IN JUB_CHAR_CPTR response,
  *           data - APDU data in hex string
  * @out param : safeApdu - APDU in cipher text
  * @last change :
+ * @ condition: JUB_GPC_Initialize() has been called first.
 *****************************************************************************/
 JUB_COINCORE_DLL_EXPORT
 JUB_RV JUB_GPC_BuildSafeAPDU(IN JUB_ULONG cla, IN JUB_ULONG ins,
@@ -286,6 +289,7 @@ JUB_RV JUB_GPC_BuildSafeAPDU(IN JUB_ULONG cla, IN JUB_ULONG ins,
  * @out param : pwRet - APDU response
  *            decResp - APDU response data in plain text
  * @last change :
+ * @ condition: JUB_GPC_Initialize() has been called first.
 *****************************************************************************/
 JUB_COINCORE_DLL_EXPORT
 JUB_RV JUB_GPC_ParseSafeAPDUResponse(IN JUB_CHAR_CPTR response,
