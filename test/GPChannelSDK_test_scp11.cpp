@@ -16,6 +16,7 @@
 using std::getline;
 using std::istringstream;
 
+
 JUB_RV scp11_parse_certificate(const std::string& cert,
                                std::string& certSN, std::string& certSubjectID) {
 
@@ -97,6 +98,7 @@ void scp11_process_sample(const char* json_file) {
     vKeyLength.push_back(keyLength);
     sharedInfo.keyLength = (JUB_CHAR_PTR)vKeyLength.getHex().c_str();
     sharedInfo.hostID = (char*)root["SCP11c"]["HostID"].asCString();
+    sharedInfo.cardGroupID = (char*)subjectID.c_str();
 
     char* p = (char*)root["SCP11c"]["OCE"][1][0].asCString();
     uchar_vector vOCECert(p);
@@ -190,6 +192,7 @@ void scp11_process_sample(const char* json_file) {
     rv = JUB_GPC_ParseAPDUResponse(maResponseData, &wRet, &maResponse);
     std::cout << "JUB_GPC_ParseAPDUResponse return " << rv << std::endl;
     if (JUBR_OK != rv) {
+        JUB_FreeMemory(maResponse);
         return ;
     }
     uchar_vector vResp(maResponse);
@@ -200,6 +203,7 @@ void scp11_process_sample(const char* json_file) {
     rv = JUB_GPC_OpenSecureChannel(maResponse);
     std::cout << "JUB_GPC_OpenSecureChannel return " << rv << std::endl;
     if (JUBR_OK != rv) {
+        JUB_FreeMemory(maResponse);
         return ;
     }
     JUB_FreeMemory(maResponse);
@@ -207,6 +211,7 @@ void scp11_process_sample(const char* json_file) {
     // 5. Secure channel APDU /////////////////////////////////////////////////////////
     // JUB_GPC_BuildSafeAPDU() and JUB_GPC_ParseSafeAPDUResponse() MUST be called in pairs.
     // Non-ciphertext APDU can be interspersed between ciphertext APDUs in the channel.
+
     // Verify PIN: 80 20 00 00 ////////////////////////////////////////////////////////
     //    ------------------------------------------------
     //    84 20 00 00 18
@@ -423,10 +428,12 @@ void scp11_struct_test(const char* json_file) {
     uchar_vector keyLength;
     keyLength.push_back(root["SCP11c"]["KeyLength"].asUInt());
     uchar_vector hostID((char*)root["SCP11c"]["HostID"].asCString());
+    uchar_vector cardGroupID("6A75626974657277616C6C6574");
     scp11_sharedInfo shInfo(keyUsage,
                             keyType,
                             keyLength,
-                            hostID);
+                            hostID,
+                            cardGroupID);
     uchar_vector sharedInfo = shInfo.encodeLV();
     std::cout << "sharedInfo: " << sharedInfo.getHex() << std::endl;
     unsigned int sharedInfoLen = (unsigned int)sharedInfo.size();
